@@ -1,53 +1,705 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>reveal-boilerplate</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
-    <link rel="stylesheet" href="node_modules/reveal.js/css/theme/white.css" id="theme">
-    <!-- Code syntax highlighting -->
-    <link rel="stylesheet" href="node_modules/reveal.js/lib/css/zenburn.css">
-    <link rel="stylesheet" href="css/custom.css">
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match(/print-pdf/gi) ? 'node_modules/reveal.js/css/print/pdf.css' : 'node_modules/reveal.js/css/print/paper.css';
-      document.getElementsByTagName('head')[0].appendChild(link);
-    </script>
-    <!--[if lt IE 9]>
-    <script src="node_modules/reveal.js/lib/js/html5shiv.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="reveal">
-      <div class="slides">
-        <section data-markdown="slides/main.md" data-separator="^\n\n\n"></section>
-      </div>
-    </div>
-    <script src="node_modules/reveal.js/lib/js/head.min.js"></script>
-    <script src="node_modules/reveal.js/js/reveal.js"></script>
-    <script>
-      // Full list of configuration options available at:
-      // https://github.com/hakimel/reveal.js#configuration
-      Reveal.initialize({
-        controls: true,
-        progress: true,
-        history: true,
-        center: true,
-        transition: 'default',  // none/fade/slide/convex/concave/zoom
-        // Optional reveal.js plugins
-        dependencies: [
-          { src: 'node_modules/reveal.js/lib/js/classList.js', condition: function () { return !document.body.classList; } },
-          { src: 'node_modules/reveal.js/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
-          { src: 'node_modules/reveal.js/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
-          { src: 'node_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
-          { src: 'node_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
-          { src: 'node_modules/reveal.js/plugin/notes/notes.js', async: true }
-        ]
-      });
-    </script>
-  </body>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Code Smells & Refactoring</title>
+
+		<meta name="author" content="Ana Paula Gomes">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css">
+		<link rel="stylesheet" href="css/custom.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>Começaremos em instantes...</section>
+
+				<section  data-background-video="videos/code-smells.mp4" data-background-color="#000000">
+					<!-- intro with ghostbusters -->
+				</section>
+
+				<section data-background-color="#000000">
+
+					<h1>Code Smells</h1>
+					<!-- source: https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Ghostbusters_logo.svg/1200px-Ghostbusters_logo.svg.png -->
+					<img width="200" height="200" class="plain" src="img/ghostbusters.png" style="background: none;" alt="Ghostbusters logo">
+
+					<h3>Seu código está cheio deles. Who you gonna call?</h3>
+
+					<p>
+						<small><a href="http://twitter.com/anapaulagomess">@anapaulagomess</a></small>
+					</p>
+				</section>
+
+				<section data-background="https://media.giphy.com/media/4fDgp7Cah7C7u/giphy.gif">
+					<h2>Mas... o que é mesmo um Code Smell?!</h2>
+				</section>
+
+				<section>
+					<blockquote cite="https://martinfowler.com/bliki/CodeSmell.html">
+						&ldquo;A code smell is a surface indication that usually corresponds to a deeper problem in the system.&rdquo;
+					</blockquote>
+
+					<img width="200" height="200" class="plain" src="img/martin.jpg" alt="Martin Fowler picture">
+					<img width="200" height="200" class="plain" src="img/kent.jpg" alt="Kent Beck picture">
+				</section>
+
+				<section>
+					<section id="fragments">
+						<h2>Code Smells</h2>
+
+						<ul>
+							<li class="fragment"><a>Object-Orientation Abusers</a></li>
+							<li class="fragment"><a>Couplers</a></li>
+							<li class="fragment"><a>Bloaters</a></li>
+							<li class="fragment"><a>Dispensables</a></li>
+							<li class="fragment"><a>Change Preventers</a></li>
+						</ul>
+
+					</section>
+				</section>
+
+				<section>
+					<h2>Code Smells</h2>
+
+					<a>São muitos!</a>
+
+					<table style="font-size: 19px;">
+						<thead>
+							<tr>
+								<th>Object-Orientation Abusers</th>
+								<th>Couplers</th>
+								<th>Bloaters</th>
+								<th>Dispensables</th>
+								<th>Change Preventers</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="fragment highlight-green">Conditional Complexity</span></td>
+								<td>Feature Envy</td>
+								<td>Long Method</td>
+								<td>Comments</td>
+								<td>Divergent Change</td>
+							</tr>
+							<tr>
+								<td>Temporary Field</td>
+								<td>Inappropriate Intimacy</td>
+								<td>Large Class</td>
+								<td><span class="fragment highlight-green">Duplicate Code</span></td>
+								<td><span class="fragment highlight-green">Shotgun Surgery</span></td>
+							</tr>
+							<tr>
+								<td>Refused Bequest</td>
+								<td><span class="fragment highlight-green">Message Chains</span></td>
+								<td>Primitive Obsession</td>
+								<td>Lazy Class</td>
+								<td>Parallel Inheritance</td>
+							</tr>
+							<tr>
+								<td>Alternative Classes with Different Interfaces</td>
+								<td>Middle Man</td>
+								<td><span class="fragment highlight-green">Long Parameter List</span></td>
+								<td>Data Class</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td>Data Clumps</td>
+								<td>Dead Code</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>Spectulative Generality</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<!-- <small>Fonte: https://sourcemaking.com/refactoring/smells/</small> -->
+
+				</section>
+
+				<!-- ===================================== Conditional Complexity ===================================== -->
+
+				<section data-transition="slide" data-background="#2F6D4D" data-background-transition="zoom">
+
+					<h2 style="color: #e8a93e;">Conditional Complexity</h2>
+
+					<p>
+						<small>Object-Orientation Abusers</small>
+						<pre>
+							<code class="hljs" data-trim contenteditable style="font-size: 19px;">
+	public boolean apply(Ticket ticket) {
+		return ticket.getPrice() != null
+		&& ticket.getPrice().getTaxDetails() != null
+		&& !ticket.getPrice().getTaxDetails().isEmpty();
+	}
+							</code>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Conditional Complexity
+					</p>
+
+					<p>
+						<small>Object-Orientation Abusers</small>
+					</p>
+
+					<h3>Extract Method</h3>
+					<h3>Extract Field</h3>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Conditional Complexity
+					</p>
+
+					<p>
+						<small>Object-Orientation Abusers</small>
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+	public boolean apply(Ticket ticket) {
+		return ticket.getPrice() != null
+		&& ticket.getPrice().getTaxDetails() != null
+		&& !ticket.getPrice().getTaxDetails().isEmpty();
+	}
+							</code>
+						</pre>
+
+							<img width="68" height="80" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+	public boolean apply(Ticket ticket) {
+		return ticket.isValid();
+	}
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Conditional Complexity
+					</p>
+
+					<p>
+						<small>Object-Orientation Abusers</small>
+					</p>
+
+					<a>Existe outra alternativa para os <em><strong>null checkers</strong></em> também?</a>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Conditional Complexity
+					</p>
+
+					<h2>Null Object</h2>
+
+					<p>
+
+						<pre>
+							<code class="hljs" data-trim contenteditable style="font-size: 19px;">
+	public Float getValue() {
+	    TicketPrice ticketPrice = getFirst(pricesByCategory.values(), null);
+	    return ticketPrice != null ? ticketPrice.getValue() : null;
+	}
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section id="fragments-null-object">
+
+					<p>
+						<a>Refactoring</a> with <strong>Null Object</strong>
+					</p>
+
+					<ol>
+						<li class="fragment">Pense em quais seriam os valores padrão para cada chamada</li>
+						<li class="fragment">Crie uma subclasse para representar o comportamento Nulo</li>
+						<li class="fragment">Substitua os lugares onde existem essas chamadas!</li>
+					</ol>
+
+					<pre>
+						<code class="fragment hljs" data-trim contenteditable style="font-size: 19px;">
+	public class NullTicketPrice extends AbstractTicketPrice {
+
+	    public Float getPromotionalAmount() { return 0.0f; }
+	    public Float getValue() { return 0.0f; }
+
+	}
+						</code>
+					</pre>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> with <strong>Null Object</strong>
+					</p>
+
+					<pre>
+						<code class="hljs" data-trim contenteditable style="font-size: 19px;">
+	public Float getValue() {
+		TicketPrice ticketPrice = getFirst(pricesByCategory.values(), null);
+		return ticketPrice != null ? ticketPrice.getValue() : null;
+	}
+						</code>
+					</pre>
+
+					<img width="68" height="80" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+
+					<pre>
+						<code class="hljs" data-trim contenteditable style="font-size: 19px;">
+	public Float getValue() {
+		AbstractTicketPrice ticketPrice = getFirst(pricesByCategory.values(),
+			new NullTicketPrice());
+
+		return ticketPrice.getValue();
+	}
+						</code>
+					</pre>
+
+				</section>
+
+				<!-- ===================================== message chain ===================================== -->
+				<section data-transition="slide" data-background="#2F6D4D" data-background-transition="zoom">
+
+					<h2 style="color: #e8a93e;">Message Chain</h2>
+
+					<p>
+						<small>Couplers</small>
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+								if (!entityResponse.getStatusCode().is2xxSuccessful())
+							</code>
+						</pre>
+
+						<h4 class="fragment current-visible">x 3</h4>
+
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+								ticket.getCategory().getDiscount();
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Message Chains
+					</p>
+
+					<h2>Extract Method</h2>
+
+					<p>
+						<pre>
+							<code class="hljs" data-trim contenteditable data-noescape style="font-size: 19px;">
+	private boolean responseIsNotSuccessful(ResponseEntity<String> entityResponse) {
+		return !entityResponse.getStatusCode().is2xxSuccessful();
+	}
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Message Chains
+					</p>
+
+					<h2>Extract Method</h2>
+
+					<p>
+
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+								if (!entityResponse.getStatusCode().is2xxSuccessful())
+							</code>
+						</pre>
+
+						<img width="68" height="138" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+								if (responseIsNotSuccessful(entityResponse))
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Message Chains
+					</p>
+
+					<h2>Hide Delegate</h2>
+
+					<p>
+						<pre>
+							<code class="hljs" data-trim contenteditable data-noescape>
+	public String getDiscountOfCategory() {
+		return this.getCategory().getDiscount();
+	}
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Message Chains
+					</p>
+
+					<h2>Hide Delegate</h2>
+
+					<p>
+
+						<pre>
+							<code class="hljs" data-trim contenteditable style="font-size: 18px;">
+								ticket.getCategory().getDiscount();
+							</code>
+						</pre>
+
+						<img width="68" height="138" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+
+						<pre>
+							<code class="hljs" data-trim contenteditable style="font-size: 18px;">
+								ticket.getDiscountOfCategory();
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section id="fragments-message-chains">
+
+					<p>
+						<a>Refactoring</a> Message Chains
+					</p>
+
+					<h3>Dicas</h3>
+
+					<p class="green">
+						<span class="fragment">Utilize regex</span>
+						<span class="fragment">, resista aos cantos da IDE</span>
+						<span class="fragment">, só fale com os vizinhos</span>
+						<span class="fragment"> e pense <strong>sempre</strong> na leitura.</span>
+					</p>
+
+				</section>
+
+				<!-- ===================================== Long Parameter List ===================================== -->
+				<section data-transition="slide" data-background="#2F6D4D" data-background-transition="zoom">
+
+					<h2 style="color: #e8a93e;">Long Parameter List</h2>
+
+					<p>
+						<small>Bloaters</small>
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+
+								private Optional&lt;PromotionalPrice&gt; getPromotionalPrice(
+									boolean employeeDiscount,
+									String dayOfWeek,
+									String category,
+									String city,
+									String discountCoupon,
+									TicketPrice price)
+
+							</code>
+						</pre>
+					</p>
+
+					<h4 class="fragment fade-up">Nesse método: 6 parâmetros</h4>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Long Parameter List
+					</p>
+
+					<!-- <h3>Introduce Parameter Object</h3> -->
+
+					<p>
+
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+								getTicket(boolean employeeDiscount, String dayOfWeek,
+									String category, String city)
+
+								getTicketByMovie(String movieTitle, String category, String city)
+
+								getTicketByCategory(boolean employeeDiscount, String dayOfWeek,
+									String category, String city, String discountCoupon,
+									TicketPrice price)
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Long Parameter List
+					</p>
+
+					<h3>Introduce Parameter Object</h3>
+
+					<p>
+						<pre>
+							<code class="hljs" data-trim contenteditable data-noescape style="font-size: 18px;">
+
+	@Builder
+	public class TicketParameterList {
+
+			private String movieTitle;
+			private String dayOfWeek;
+			private String category;
+			private String city;
+			private String discountCoupon;
+			private boolean employeeDiscount;
+			private TicketPrice price;
+
+	}
+
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Long Parameter List
+					</p>
+
+					<h3>Introduce Parameter Object</h3>
+
+					<p>
+
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+								getTicket(TicketParameterList parameters)
+
+								getTicketByMovie(TicketParameterList parameters)
+
+								getTicketByCategory(TicketParameterList parameters)
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section id="fragments-long-parameter-list">
+
+					<p>
+						<a>Refactoring</a> Long Parameter List
+					</p>
+
+					<h3>Dicas</h3>
+
+					<p class="green">
+						<span class="fragment">Tente manter com menos de 3 ou 4 (+Sonar)</span>
+						<span class="fragment">, pense se eles poderiam ser objetos de domínio</span>
+						<span class="fragment"> e pense <strong>sempre</strong> na leitura.</span>
+					</p>
+
+				</section>
+
+				<!-- ===================================== duplicated code ===================================== -->
+
+				<section data-transition="slide" data-background="#2F6D4D" data-background-transition="zoom">
+
+					<h2 style="color: #e8a93e;">Duplicated Code</h2>
+
+					<p>
+						<small>Dispensables</small>
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+
+								private boolean toDeliver() {...}
+
+								Client validateClient(String cpf) {...}
+
+								boolean process() {...}
+
+							</code>
+						</pre>
+					</p>
+
+					<small class="fragment fade-up">CreditCardPayment</small>
+					<small class="fragment fade-up">& MoneyPayment</small>
+
+				</section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Duplicated Code
+					</p>
+
+					<h4>Extract Class</h4>
+					<h4>Pull Up Method</h4>
+
+					<p>
+						<pre>
+							<code class="hljs" data-trim contenteditable data-noescape>
+							public abstract class Payment {...}
+							</code>
+						</pre>
+
+						<pre>
+							<code class="hljs" data-trim contenteditable data-noescape style="font-size: 18px;">
+							public class CreditCard extends Payment {...}
+
+							public class Money extends Payment {...}
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section id="fragments-duplicated-code">
+
+					<p>
+						<a>Refactoring</a> Duplicated Code
+					</p>
+
+					<h3>Dicas</h3>
+
+					<p class="green">
+						<span class="fragment">Não seja uma pessoa orgulhosa: ferramentas podem ajudar</span>
+						<span class="fragment">, existem muitos jeitos de tratar esse <strong><em>smell</em></strong></span>
+						<span class="fragment"> e lembre-se dos <em>trade off</em>.</span>
+					</p>
+
+				</section>
+
+				<!-- ===================================== shotgun surgery ===================================== -->
+
+				<section data-transition="slide" data-background="#2f6d4d" data-background-transition="zoom">
+
+					<h2 style="color: #e8a93e;">Shotgun Surgery</h2>
+
+					<p>
+						<small>Change Preventers</small>
+						<pre>
+							<code class="hljs" data-trim contenteditable>
+								//muitas classes
+
+								//muitos métodos
+
+								//muitos testes
+							</code>
+						</pre>
+					</p>
+
+				</section>
+
+				<section data-background="http://i.imgur.com/c6Ngmwq.jpg"></section>
+
+				<section>
+
+					<p>
+						<a>Refactoring</a> Shotgun Surgery
+					</p>
+
+					<h4>Move Method</h4>
+					<h4>Move Field</h4>
+					<h4>Inline class</h4>
+
+				</section>
+
+				<!-- ===================================== dicas gerais ===================================== -->
+
+				<section id="fragments-dicas-gerais">
+
+					<h2>Pra finalizar!</h2>
+
+					<ul class="mustard">
+						<li class="fragment fade-up">Use a notação @Deprecated + {nome da sua IDE aqui} shortcuts/features</li>
+						<li class="fragment fade-up">Sonarqube é legal</li>
+						<li class="fragment fade-up">Code Review + PR = ❤️</li>
+						<li class="fragment fade-up">Advogue por código limpo no seu time</li>
+					</ul>
+
+				</section>
+
+				<!-- ===================================== encerramento ===================================== -->
+
+				<section data-background="http://www.ghostbusters.com/images/ghostbusters-full-new-img.jpg" data-background-color="#cccccc">
+
+					<h2>Obrigada!</h2>
+					<!-- source: http://www.ghostbusters.com/images/ghostbusters-full-new-img.jpg -->
+
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
 </html>
